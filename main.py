@@ -42,10 +42,34 @@ class Blog(db.Model):
     created = db.DateTimeProperty(auto_now_add=True)
 
 
+class ViewPostHandler(webapp2.RequestHandler):
+    def get(self, id):
+        i = Blog.get_by_id(int(id))
+        a = i.subject
+        b = i.content
+        c = str(i.created)
+        post = ("<h1>" + a + "</h1>" + "<h3>" + b + "</h3>" + "<p>" + c + "</p>")
+        self.response.write(post)
+
+
+class WelcomePage(webapp2.RequestHandler):
+    def get(self):
+        a = "<h1><a href='/blog'>Click here to access the blog</a></h1>"
+        self.response.out.write(a)
+
+
 class MainPage(Handler):
     def render_front(self, subject="", content="", error=""):
         blogs = db.GqlQuery("SELECT * FROM Blog ORDER BY created DESC LIMIT 5")
-        self.render("front.html", subject=subject, content=content, error=error, blogs=blogs)
+        self.render("base.html", subject=subject, content=content, error=error, blogs=blogs)
+
+    def get(self):
+        self.render_front()
+
+
+class NewPost(Handler):
+    def render_front(self, subject="", content="", error=""):
+        self.render("newpost.html", subject=subject, content=content, error=error)
 
     def get(self):
         self.render_front()
@@ -55,19 +79,24 @@ class MainPage(Handler):
         content = self.request.get("content")
 
         if subject and content:
-            a = Blog(subject=subject, content=content)
-            a.put()
+            post = Blog(subject=subject, content=content)
+            post.put()
 
-            self.redirect("/")
+            self.redirect("/blog/" + str(post.key().id()))
         else:
             error = "We need both a subject and some content!"
             self.render_front(subject, content, error)
 
 
-app = webapp2.WSGIApplication([('/', MainPage)], debug=True)
+app = webapp2.WSGIApplication([("/", WelcomePage),
+                               ("/blog", MainPage),
+                               ("/blog/newpost", NewPost),
+                               (webapp2.Route('/blog/<id:\d+>', ViewPostHandler))
+                               ], debug=True)
 
 # ("/postpage", PostPage)  IDK.....
 
-
+# TODO --- webapp2.Route('/blog/<id:\d+>', ViewPostHandler)
+# TODO     Post.get_by_id(id)
 
 
