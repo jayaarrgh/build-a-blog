@@ -47,8 +47,7 @@ class ViewPostHandler(webapp2.RequestHandler):
         i = Blog.get_by_id(int(id))
         a = i.subject
         b = i.content
-        c = str(i.created)
-        post = ("<h1>" + a + "</h1>" + "<h3>" + b + "</h3>" + "<p>" + c + "</p>")
+        post = ("<h1>" + a + "</h1>" + "<h3>" + b + "</h3>")
         self.response.write(post)
 
 
@@ -94,9 +93,6 @@ app = webapp2.WSGIApplication([("/", WelcomePage),
                                (webapp2.Route('/blog/<id:\d+>', ViewPostHandler))
                                ], debug=True)
 
-# ("/postpage", PostPage)  IDK.....
 
-# TODO --- webapp2.Route('/blog/<id:\d+>', ViewPostHandler)
-# TODO     Post.get_by_id(id)
 
 
