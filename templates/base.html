@@ -63,17 +63,10 @@
 		<h1><a href="/blog">Build-a-Blog</a></h1>
 		<h2><a href="/blog/newpost">Make a New Post!</a></h2>
 
-		{% block content %}
-        {% endblock %}
-
 		<hr>
 
-		{% for blog in blogs %}
-			<div class='art'>
-				<div class='art-title'><a href=/blog/{{blog.key().id()}}>{{blog.subject}}</a></div>
-				<pre class="art-body">{{blog.content}}</pre>
-			</div>
-		{% endfor %}
+		{% block content %}
+        {% endblock %}
 
 	</body>
 </html>

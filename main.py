@@ -60,7 +60,7 @@ class WelcomePage(webapp2.RequestHandler):
 class MainPage(Handler):
     def render_front(self, subject="", content="", error=""):
         blogs = db.GqlQuery("SELECT * FROM Blog ORDER BY created DESC LIMIT 5")
-        self.render("base.html", subject=subject, content=content, error=error, blogs=blogs)
+        self.render("front.html", subject=subject, content=content, error=error, blogs=blogs)
 
     def get(self):
         self.render_front()

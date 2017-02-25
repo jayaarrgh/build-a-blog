@@ -2,12 +2,11 @@
 
 {% block content %}
 
-		<hr>
-
 		{% for blog in blogs %}
 			<div class='art'>
 				<div class='art-title'><a href=/blog/{{blog.key().id()}}>{{blog.subject}}</a></div>
 				<pre class="art-body">{{blog.content}}</pre>
 			</div>
 		{% endfor %}
+
 {% endblock %}
